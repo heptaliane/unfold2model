@@ -45,6 +45,12 @@ impl From<Coordinate> for Edge {
     }
 }
 
+impl From<[f64; 3]> for Edge {
+    fn from(coord: [f64; 3]) -> Self {
+        Edge::from(Coordinate::from(coord))
+    }
+}
+
 impl Display for Edge {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.coordinate)
