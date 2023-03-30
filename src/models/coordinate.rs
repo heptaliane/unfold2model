@@ -56,8 +56,45 @@ impl Mul for Coordinate {
         self.data
             .iter()
             .zip(rhs.data.iter())
-            .map(|(v1, v2)| v1 * v2)
+            .map(|(vl, vr)| vl * vr)
             .reduce(|acc, v| acc + v)
             .unwrap()
     }
+}
+
+#[test]
+fn test_add_coordinate() {
+    let coord1 = Coordinate {data: [1., 2., 3.]};
+    let coord2 = Coordinate {data: [1., 4., 9.]};
+
+    let actual = coord1 + coord2;
+    let expected = Coordinate {data: [2., 6., 12.]};
+    assert_eq!(actual, expected);
+    assert_ne!(actual, coord1);
+}
+
+#[test]
+fn test_sub_coordinate() {
+    let coord1 = Coordinate {data: [1., 2., 3.]};
+    let coord2 = Coordinate {data: [1., 4., 9.]};
+
+    let actual = coord1 - coord2;
+    let expected = Coordinate {data: [0., -2., -6.]};
+    assert_eq!(actual, expected);
+    assert_ne!(actual, coord1);
+}
+
+#[test]
+fn test_mul_coordinate() {
+    let coord1 = Coordinate {data: [1., 2., 3.]};
+    let coord2 = Coordinate {data: [1., 4., 9.]};
+
+    let actual1 = coord1 * coord2;
+    let expected1 = 36.;
+    assert_eq!(actual1, expected1);
+
+    let coord3 = Coordinate {data: [1., 1., -1.]};
+    let actual2 = coord1 * coord3;
+    let expected2 = 0.;
+    assert_eq!(actual2, expected2);
 }
