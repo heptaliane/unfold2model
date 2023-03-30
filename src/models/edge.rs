@@ -6,7 +6,7 @@ use super::coordinate::Coordinate;
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Edge {
     coordinate: Coordinate,
-    fixed: bool,
+    pub fixed: bool,
 }
 
 impl Edge {
@@ -18,21 +18,12 @@ impl Edge {
         match self.fixed {
             true => Err(EdgeFixedError {
                 source: self.coordinate,
-                destination: coord,
             }),
             false => {
                 self.coordinate = coord;
                 Ok(())
             }
         }
-    }
-
-    pub fn fix(&mut self) {
-        self.fixed = true;
-    }
-
-    pub fn unfix(&mut self) {
-        self.fixed = false;
     }
 }
 
@@ -47,7 +38,7 @@ impl From<Coordinate> for Edge {
 
 impl From<[f64; 3]> for Edge {
     fn from(coord: [f64; 3]) -> Self {
-        Edge::from(Coordinate::from(coord))
+        Edge::from(Coordinate { data: coord })
     }
 }
 
@@ -60,15 +51,14 @@ impl Display for Edge {
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct EdgeFixedError {
     source: Coordinate,
-    destination: Coordinate,
 }
 
 impl Display for EdgeFixedError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "The edge at {} cannot be moved to {} as it is fixed in place",
-            self.source, self.destination,
+            "The edge at {} cannot be moved as it is fixed in place",
+            self.source,
         )
     }
 }
